@@ -53,7 +53,7 @@ input:focus-visible {
   outline-offset: 3px;
 }
 
-/* A aplicação ocupa toda a janela, sem limite de largura. */
+
 .app {
   position: fixed;
   inset: 0;
@@ -155,7 +155,7 @@ input:focus-visible {
   box-shadow: 0 2px 5px #0002;
 }
 
-/* Cartão azul ocupa todo o espaço restante. */
+
 .blue-card {
   position: relative;
   z-index: 1;
@@ -192,7 +192,7 @@ input:focus-visible {
   letter-spacing: 1.15px;
 }
 
-/* Caixa laranja das opções */
+
 .option-panel {
   flex: 1 1 auto;
   min-width: 0;
@@ -259,7 +259,7 @@ input:focus-visible {
   border-color: #ffffff88;
 }
 
-/* Opção de alergia severa */
+
 .severe {
   flex: 0 0 auto;
   display: flex;
@@ -307,7 +307,7 @@ input:focus-visible {
   letter-spacing: .3px;
 }
 
-/* Botão fixo no final do cartão */
+
 .continue {
   flex: 0 0 auto;
   width: 100%;
@@ -327,7 +327,7 @@ input:focus-visible {
   transform: scale(.99);
 }
 
-/* Segunda tela */
+
 .fav-screen .blue-card {
   padding-top: clamp(18px, 3.5dvh, 32px);
 }
@@ -341,7 +341,6 @@ input:focus-visible {
   margin-top: 0;
 }
 
-/* Celulares pequenos ou com pouca altura */
 @media (max-height: 700px) {
   .screen-title {
     min-height: 28px;
@@ -388,7 +387,7 @@ input:focus-visible {
   }
 }
 
-/* Celulares estreitos */
+
 @media (max-width: 360px) {
   .screen-title {
     padding-left: 5%;
@@ -421,7 +420,6 @@ input:focus-visible {
   }
 }
 
-/* Telas maiores: mantém tela cheia, sem max-width. */
 @media (min-width: 600px) {
   .screen {
     width: 100%;
@@ -485,12 +483,11 @@ input:focus-visible {
   width: 18px;
   height: 16px;
 }
-/* Deixar todos os ícones brancos */
+
 .status-icon {
   filter: brightness(0) invert(1);
 }
 
-/* Ícone Wi-Fi em branco */
 .wifi-iphone {
   color: #fff;
 }
@@ -524,7 +521,7 @@ input:focus-visible {
   <div class="status-right">
     <img src="img/sinal.png" alt="Sinal" class="status-icon">
 
-    <!-- Ícone Wi-Fi -->
+    
     <span class="wifi-iphone">
       <svg viewBox="0 0 24 18" aria-label="Wi-Fi" role="img">
         <path d="M2 5.5a15 15 0 0 1 20 0"
@@ -619,7 +616,7 @@ input:focus-visible {
     favorites.hidden = showProfile;
   }
 
-  // Selecionar restrições e ir para Favoritos.
+  
   document
     .getElementById("continue-to-favorites")
     .addEventListener("click", () => {
@@ -649,14 +646,14 @@ input:focus-visible {
       showStep("favorites");
     });
 
-  // Voltar para a primeira tela.
+  
   document
     .getElementById("back-to-profile")
     .addEventListener("click", () => {
       showStep("profile");
     });
 
-  // Salvar as preferências da segunda tela.
+  
   document
     .getElementById("finish-onboarding")
     .addEventListener("click", () => {
@@ -671,7 +668,7 @@ input:focus-visible {
           JSON.stringify(choices)
         );
       } catch (error) {
-        // A interface continua funcional sem armazenamento.
+      
       }
 
       const message = document.getElementById("favorites-error");
