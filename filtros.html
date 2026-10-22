@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#124f8b">
+<title>OULLIN — Perfil alimentar</title>
+
+<style>
+:root {
+  --purple: #51284f;
+  --blue: #124f8b;
+  --orange: #ff8900;
+  --yellow: #ffbd05;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  background: var(--blue);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
+}
+
+/* A aplicação ocupa toda a janela, sem limite de largura. */
+.app {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background: var(--blue);
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--blue);
+}
+
+.screen[hidden] {
+  display: none !important;
+}
+
+.screen-title {
+  flex: 0 0 auto;
+  min-height: 34px;
+  padding:
+    max(5px, var(--safe-top))
+    5.5%
+    6px;
+  color: #c7afc3;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+/* Foto do topo */
+.photo {
+  position: relative;
+  flex: 0 0 clamp(105px, 19dvh, 180px);
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.photo.profile {
+  background-image:
+    linear-gradient(#0002, #0002),
+    url("https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1400&q=90");
+  background-position: center 48%;
+}
+
+.photo.favorites {
+  background-image:
+    linear-gradient(#0003, #0003),
+    url("https://images.unsplash.com/photo-1511985639851-a6c1d4a1a8b5?auto=format&fit=crop&w=1400&q=90");
+  background-position: center 43%;
+}
+
+.status {
+  position: absolute;
+  top: 12px;
+  left: 8%;
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow: 0 1px 4px #000;
+}
+
+.status-right {
+  position: absolute;
+  top: 12px;
+  right: 8%;
+  font-size: 12px;
+  text-shadow: 0 1px 4px #000;
+}
+
+.back {
+  position: absolute;
+  top: 39%;
+  left: 4%;
+  width: 39px;
+  height: 37px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--yellow);
+  color: white;
+  font-size: 27px;
+  line-height: 1;
+  box-shadow: 0 2px 5px #0002;
+}
+
+/* Cartão azul ocupa todo o espaço restante. */
+.blue-card {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  margin-top: -1px;
+  padding:
+    clamp(18px, 3.5dvh, 32px)
+    clamp(22px, 8.2vw, 60px)
+    calc(14px + var(--safe-bottom));
+  border-radius: 28px 28px 0 0;
+  background: var(--blue);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.blue-card h1 {
+  flex: 0 0 auto;
+  margin: 0 0 10px;
+  font-size: clamp(20px, 5.7vw, 25px);
+  line-height: 1.15;
+  letter-spacing: 3px;
+  font-weight: 800;
+}
+
+.intro {
+  flex: 0 0 auto;
+  margin: 0 0 clamp(12px, 2.7dvh, 23px);
+  color: #f0f4fa;
+  font-size: clamp(9px, 2.65vw, 12px);
+  line-height: 1.3;
+  letter-spacing: 1.15px;
+}
+
+/* Caixa laranja das opções */
+.option-panel {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  padding:
+    clamp(12px, 2.6dvh, 20px)
+    clamp(14px, 4.5vw, 28px)
+    10px;
+  border-radius: 25px;
+  background: var(--orange);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(7px, 1.65dvh, 13px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #ffd36b var(--orange);
+}
+
+.option {
+  flex: 0 0 auto;
+  min-height: clamp(38px, 6.3dvh, 49px);
+  padding: 0 clamp(10px, 2.8vw, 20px);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background: var(--yellow);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  white-space: nowrap;
+}
+
+.option input {
+  appearance: none;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  margin: 0;
+  border: 1px solid #f5eec9;
+  border-radius: 4px;
+  background: #f5eec9;
+  position: relative;
+}
+
+.option input:checked {
+  background: var(--blue);
+  border-color: white;
+}
+
+.option input:checked::after {
+  content: "✓";
+  position: absolute;
+  left: 2px;
+  top: -2px;
+  color: white;
+  font-size: 14px;
+}
+
+.option:has(input:checked) {
+  border-color: #ffffff88;
+}
+
+/* Opção de alergia severa */
+.severe {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin: 7px 9px 10px 0;
+  color: #f5f6fb;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.severe input {
+  appearance: none;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  margin: 0;
+  border: 1px solid #f5eec9;
+  border-radius: 3px;
+  background: #f5eec9;
+}
+
+.severe input:checked {
+  background: var(--yellow);
+  border: 2px solid white;
+}
+
+.severe input:checked::after {
+  content: "✓";
+  display: block;
+  color: white;
+  font-size: 13px;
+  line-height: 14px;
+  text-align: center;
+}
+
+.error {
+  flex: 0 0 auto;
+  min-height: 0;
+  margin: 0 0 5px;
+  color: #fff4c7;
+  font-size: 11px;
+  letter-spacing: .3px;
+}
+
+/* Botão fixo no final do cartão */
+.continue {
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 47px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--orange);
+  color: white;
+  font-size: clamp(19px, 5.4vw, 22px);
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.continue:active,
+.back:active {
+  transform: scale(.99);
+}
+
+/* Segunda tela */
+.fav-screen .blue-card {
+  padding-top: clamp(18px, 3.5dvh, 32px);
+}
+
+.fav-screen .option-panel {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.fav-screen .continue {
+  margin-top: 0;
+}
+
+/* Celulares pequenos ou com pouca altura */
+@media (max-height: 700px) {
+  .screen-title {
+    min-height: 28px;
+    padding-bottom: 4px;
+  }
+
+  .photo {
+    flex-basis: clamp(75px, 15dvh, 115px);
+  }
+
+  .blue-card {
+    padding-top: 13px;
+    padding-bottom: calc(8px + var(--safe-bottom));
+  }
+
+  .blue-card h1 {
+    font-size: 19px;
+    margin-bottom: 6px;
+  }
+
+  .intro {
+    margin-bottom: 9px;
+    line-height: 1.2;
+  }
+
+  .option-panel {
+    padding-top: 9px;
+    padding-bottom: 7px;
+    gap: 6px;
+  }
+
+  .option {
+    min-height: 34px;
+    border-radius: 12px;
+  }
+
+  .severe {
+    margin-top: 4px;
+    margin-bottom: 6px;
+  }
+
+  .continue {
+    min-height: 40px;
+  }
+}
+
+/* Celulares estreitos */
+@media (max-width: 360px) {
+  .screen-title {
+    padding-left: 5%;
+  }
+
+  .blue-card {
+    padding-left: 6%;
+    padding-right: 6%;
+  }
+
+  .blue-card h1 {
+    letter-spacing: 2.4px;
+  }
+
+  .intro {
+    letter-spacing: .8px;
+  }
+
+  .option-panel {
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 21px;
+  }
+
+  .option {
+    gap: 10px;
+    padding-left: 10px;
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+}
+
+/* Telas maiores: mantém tela cheia, sem max-width. */
+@media (min-width: 600px) {
+  .screen {
+    width: 100%;
+    max-width: none;
+  }
+
+  .blue-card {
+    padding-left: clamp(30px, 8vw, 120px);
+    padding-right: clamp(30px, 8vw, 120px);
+  }
+
+  .option-panel {
+    padding-left: clamp(20px, 5vw, 72px);
+    padding-right: clamp(20px, 5vw, 72px);
+  }
+}
+.photo_profile {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 12px;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.status {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.status-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.wifi-iphone {
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+}
+
+.wifi-iphone svg {
+  display: block;
+  width: 18px;
+  height: 16px;
+}
+/* Deixar todos os ícones brancos */
+.status-icon {
+  filter: brightness(0) invert(1);
+}
+
+/* Ícone Wi-Fi em branco */
+.wifi-iphone {
+  color: #fff;
+}
+
+.wifi-iphone svg {
+  color: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<main class="app">
+
+  
+  <section class="screen" id="profile-screen" aria-label="Perfil alimentar">
+
+    
+
+    <div class="photo profile">
+      <div class="photo_profile">
+  <span class="status">12:22</span>
+
+  <div class="status-right">
+    <img src="img/sinal.png" alt="Sinal" class="status-icon">
+
+    <!-- Ícone Wi-Fi -->
+    <span class="wifi-iphone">
+      <svg viewBox="0 0 24 18" aria-label="Wi-Fi" role="img">
+        <path d="M2 5.5a15 15 0 0 1 20 0"
+              fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M5.5 9a10 10 0 0 1 13 0"
+              fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M9 12.5a5 5 0 0 1 6 0"
+              fill="none" stroke="currentColor"
+              stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="12" cy="16" r="1.5" fill="currentColor"/>
+      </svg>
+    </span>
+
+    <img src="img/bateria.png" alt="Bateria" class="status-icon">
+  </div>
+</div>
+      <button class="back" type="button" aria-label="Voltar">←</button>
+    </div>
+
+    <div class="blue-card">
+
+      <h1>O que precisamos<br>evitar?</h1>
+
+      <p class="intro">
+        Com base em suas restrições alimentares<br>
+        selecione quais ingredientes você não pode<br>
+        comer
+      </p>
+
+      <div class="option-panel" id="avoid-options">
+
+        <label class="option">
+          <input type="checkbox" value="Amendoim">
+          <span>AMENDOIM</span>
+        </label>
+
+        <label class="option">
+          <input type="checkbox" value="Carne vermelha">
+          <span>CARNE VERMELHA</span>
+        </label>
+
+        <label class="option">
+          <input type="checkbox" value="Carne suína">
+          <span>CARNE VERMELHA</span>
+        </label>
+
+        <label class="option">
+          <input type="checkbox" value="Carne branca">
+          <span>CARNE BRANCA</span>
+        </label>
+
+        <label class="option">
+          <input type="checkbox" value="Ovo">
+          <span>OVO</span>
+        </label>
+
+        <label class="option">
+          <input type="checkbox" value="Leite de vaca">
+          <span>LEITE DE VACA</span>
+        </label>
+
+      </div>
+
+      <label class="severe">
+        <span>Alergia severa?</span>
+        <input id="severe" type="checkbox">
+      </label>
+
+      <p class="error" id="profile-error" aria-live="polite"></p>
+
+      <button class="continue">
+        Continuar</button>
+
+    </div>
+  </section>
+
+
+
+</main>
+
+<script>
+(() => {
+  const profile = document.getElementById("profile-screen");
+  const favorites = document.getElementById("favorites-screen");
+
+  function showStep(step) {
+    const showProfile = step === "profile";
+
+    profile.hidden = !showProfile;
+    favorites.hidden = showProfile;
+  }
+
+  // Selecionar restrições e ir para Favoritos.
+  document
+    .getElementById("continue-to-favorites")
+    .addEventListener("click", () => {
+
+      const restrictions = [
+        ...document.querySelectorAll("#avoid-options input:checked")
+      ].map(input => input.value);
+
+      const severe = document.getElementById("severe").checked;
+
+      try {
+        sessionStorage.setItem(
+          "oullin_restricoes",
+          JSON.stringify(restrictions)
+        );
+
+        sessionStorage.setItem(
+          "oullin_alergia_severa",
+          String(severe)
+        );
+      } catch (error) {
+        // A navegação continua funcionando sem armazenamento.
+      }
+
+      document.getElementById("profile-error").textContent = "";
+
+      showStep("favorites");
+    });
+
+  // Voltar para a primeira tela.
+  document
+    .getElementById("back-to-profile")
+    .addEventListener("click", () => {
+      showStep("profile");
+    });
+
+  // Salvar as preferências da segunda tela.
+  document
+    .getElementById("finish-onboarding")
+    .addEventListener("click", () => {
+
+      const choices = [
+        ...document.querySelectorAll("#love-options input:checked")
+      ].map(input => input.value);
+
+      try {
+        sessionStorage.setItem(
+          "oullin_favoritos",
+          JSON.stringify(choices)
+        );
+      } catch (error) {
+        // A interface continua funcional sem armazenamento.
+      }
+
+      const message = document.getElementById("favorites-error");
+
+      message.textContent = "Preferências salvas!";
+
+      window.setTimeout(() => {
+        message.textContent = "";
+      }, 2200);
+    });
+})();
+</script>
+
+</body>
+</html>
